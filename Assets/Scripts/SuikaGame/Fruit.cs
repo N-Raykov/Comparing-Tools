@@ -35,7 +35,7 @@ public class Fruit : MonoBehaviour
                 // Reward for merging
                 int scoreIncrease = scoreManager.GetTierScore(tier);
                 scoreManager.AddScore(tier);
-                player.AddReward(scoreIncrease);
+                player.AddReward(scoreIncrease/25);
             }
         }
         else if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("GroundedFruit"))

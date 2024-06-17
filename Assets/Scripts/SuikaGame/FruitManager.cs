@@ -43,7 +43,14 @@ public class FruitManager : MonoBehaviour
 
     public void ResetFruits()
     {
+        currentMaxTier = 1;
+        Destroy(nextFruit);
+        GenerateNextFruit();
         foreach (var fruit in GameObject.FindGameObjectsWithTag("GroundedFruit"))
+        {
+            Destroy(fruit);
+        }
+        foreach (var fruit in GameObject.FindGameObjectsWithTag("Fruit"))
         {
             Destroy(fruit);
         }

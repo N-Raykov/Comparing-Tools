@@ -36,6 +36,8 @@ public class Player : Agent
         transform.localPosition = startingPos;
         scoreManager.ResetScore();
         fruitManager.ResetFruits();
+        Destroy(currentFruit);
+        fruitManager.HoldNextFruit();
         canDrop = true;
     }
 
@@ -56,8 +58,19 @@ public class Player : Agent
     public override void OnActionReceived(ActionBuffers actions)
     {
         canDrop = true;
+        if (actions.DiscreteActions[0] == 2)
+        {
+            Move(1);
+        }
+        else if (actions.DiscreteActions[0] == 1)
+        {
+            Move(0);
+        }
+        else
+        {
+            Move(-1);
+        }
 
-        Move(actions.DiscreteActions[0]);
         if (actions.DiscreteActions[1] == 1 && canDrop && holdingFruit && Time.time >= lastDropTime + dropCooldown)
         {
             DropFruit();
@@ -75,7 +88,7 @@ public class Player : Agent
     void Move(int direction)
     {
         float move = direction * moveSpeed * Time.deltaTime;
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x + move, leftBoundary, rightBoundary), transform.position.y, transform.position.z);
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x + move, leftBoundary + currentFruit.GetComponent<CircleCollider2D>().radius * currentFruit.transform.localScale.x, rightBoundary - currentFruit.GetComponent<CircleCollider2D>().radius * currentFruit.transform.localScale.x), transform.position.y, transform.position.z);
     }
 
     int HandleInput()
@@ -94,6 +107,7 @@ public class Player : Agent
     {
         currentFruit.transform.parent = null;
         currentFruit.GetComponent<Rigidbody2D>().simulated = true;
+        currentFruit.tag = "Fruit";
         holdingFruit = false;
         lastDropTime = Time.time;
         fruitManager.HoldNextFruit();
@@ -108,7 +122,7 @@ public class Player : Agent
             {
                 if (collider.gameObject.CompareTag("GroundedFruit"))
                 {
-                    AddReward(-1.0f); // Penalty for losing the game
+                    AddReward(-100.0f); // Penalty for losing the game
                     EndEpisode();
                 }
             }
