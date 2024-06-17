@@ -1,3 +1,4 @@
+// Fruit.cs
 using UnityEngine;
 
 public class Fruit : MonoBehaviour
@@ -5,11 +6,14 @@ public class Fruit : MonoBehaviour
     [SerializeField] int tier;
     private FruitManager fruitManager;
     private ScoreManager scoreManager;
+    private Player player; // Reference to the player for adding rewards
     private bool isMerging = false;
+
     void Start()
     {
         fruitManager = FindObjectOfType<FruitManager>();
         scoreManager = FindObjectOfType<ScoreManager>();
+        player = FindObjectOfType<Player>();
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -19,7 +23,7 @@ public class Fruit : MonoBehaviour
         {
             if (tier < fruitManager.fruitPrefabs.Length - 1 && !isMerging && !otherFruit.isMerging)
             {
-                isMerging = true; 
+                isMerging = true;
                 otherFruit.isMerging = true;
 
                 int newTier = tier + 1;
@@ -28,13 +32,14 @@ public class Fruit : MonoBehaviour
                 Destroy(otherFruit.gameObject);
                 fruitManager.SpawnFruit(newTier, position);
 
-                int scoreIncrease = (int)Mathf.Pow(2, tier + 1);
-                scoreManager.AddScore(scoreIncrease);
+                // Reward for merging
+                int scoreIncrease = scoreManager.GetTierScore(tier);
+                scoreManager.AddScore(tier);
+                player.AddReward(scoreIncrease);
             }
         }
         else if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("GroundedFruit"))
         {
-            // Tag the fruit as grounded when it touches the ground or another grounded fruit
             gameObject.tag = "GroundedFruit";
         }
     }

@@ -16,9 +16,9 @@ public class FruitManager : MonoBehaviour
 
     public void GenerateNextFruit()
     {
-        int tier = Random.Range(0, Mathf.Max(1, currentMaxTier - 1)); // Tier between 0 and 2 tiers below currentMaxTier
+        int tier = Random.Range(0, Mathf.Max(1, currentMaxTier - 1));
         nextFruit = Instantiate(fruitPrefabs[tier], nextFruitPosition.position, Quaternion.identity);
-        nextFruit.GetComponent<Rigidbody2D>().simulated = false; // Ensure the fruit is not simulated
+        nextFruit.GetComponent<Rigidbody2D>().simulated = false;
     }
 
     public void HoldNextFruit()
@@ -34,10 +34,24 @@ public class FruitManager : MonoBehaviour
     public void SpawnFruit(int tier, Vector3 position)
     {
         GameObject newFruit = Instantiate(fruitPrefabs[tier], position, Quaternion.identity);
-        newFruit.tag = "GroundedFruit"; // Tag the spawned fruit as grounded
+        newFruit.tag = "GroundedFruit";
         if (tier > currentMaxTier)
         {
             currentMaxTier = tier;
         }
     }
+
+    public void ResetFruits()
+    {
+        foreach (var fruit in GameObject.FindGameObjectsWithTag("GroundedFruit"))
+        {
+            Destroy(fruit);
+        }
+    }
+
+    public GameObject GetNextFruit()
+    {
+        return nextFruit;
+    }
 }
+
