@@ -1,4 +1,3 @@
-// ScoreManager.cs
 using UnityEngine;
 using TMPro;
 
@@ -7,16 +6,18 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI scoreText;
     private int score = 0;
     private int[] tierScores;
+    private FruitManager fruitManager;
 
     void Start()
     {
+        fruitManager = transform.parent.GetComponentInChildren<FruitManager>();
         InitializeScores();
         UpdateScoreText();
     }
 
     private void InitializeScores()
     {
-        int numTiers = FindObjectOfType<FruitManager>().fruitPrefabs.Length;
+        int numTiers = fruitManager.fruitPrefabs.Length;
         tierScores = new int[numTiers];
         tierScores[0] = 1;
         for (int i = 1; i < numTiers; i++)

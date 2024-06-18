@@ -1,0 +1,38 @@
+{
+    "Suika": {
+        "checkpoints": [
+            {
+                "steps": 499829,
+                "file_path": "results\\PPOFixed\\Suika\\Suika-499829.onnx",
+                "reward": 11.8,
+                "creation_time": 1718658786.1450553,
+                "auxillary_file_paths": [
+                    "results\\PPOFixed\\Suika\\Suika-499829.pt"
+                ]
+            },
+            {
+                "steps": 623947,
+                "file_path": "results\\PPOFixed\\Suika\\Suika-623947.onnx",
+                "reward": null,
+                "creation_time": 1718659010.2172525,
+                "auxillary_file_paths": [
+                    "results\\PPOFixed\\Suika\\Suika-623947.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 623947,
+            "file_path": "results\\PPOFixed\\Suika.onnx",
+            "reward": null,
+            "creation_time": 1718659010.2172525,
+            "auxillary_file_paths": [
+                "results\\PPOFixed\\Suika\\Suika-623947.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.27.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

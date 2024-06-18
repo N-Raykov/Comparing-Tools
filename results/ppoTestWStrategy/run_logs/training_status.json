@@ -1,0 +1,38 @@
+{
+    "Suika": {
+        "checkpoints": [
+            {
+                "steps": 499890,
+                "file_path": "results\\ppoTestWStrategy\\Suika\\Suika-499890.onnx",
+                "reward": -49.0,
+                "creation_time": 1718649271.377791,
+                "auxillary_file_paths": [
+                    "results\\ppoTestWStrategy\\Suika\\Suika-499890.pt"
+                ]
+            },
+            {
+                "steps": 754413,
+                "file_path": "results\\ppoTestWStrategy\\Suika\\Suika-754413.onnx",
+                "reward": null,
+                "creation_time": 1718649773.9800007,
+                "auxillary_file_paths": [
+                    "results\\ppoTestWStrategy\\Suika\\Suika-754413.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 754413,
+            "file_path": "results\\ppoTestWStrategy\\Suika.onnx",
+            "reward": null,
+            "creation_time": 1718649773.9800007,
+            "auxillary_file_paths": [
+                "results\\ppoTestWStrategy\\Suika\\Suika-754413.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.27.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

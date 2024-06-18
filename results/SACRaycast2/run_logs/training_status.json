@@ -1,0 +1,56 @@
+{
+    "Suika": {
+        "checkpoints": [
+            {
+                "steps": 499390,
+                "file_path": "results\\SACRaycast2\\Suika\\Suika-499390.onnx",
+                "reward": null,
+                "creation_time": 1718673669.7639246,
+                "auxillary_file_paths": [
+                    "results\\SACRaycast2\\Suika\\Suika-499390.pt"
+                ]
+            },
+            {
+                "steps": 999944,
+                "file_path": "results\\SACRaycast2\\Suika\\Suika-999944.onnx",
+                "reward": null,
+                "creation_time": 1718675872.435921,
+                "auxillary_file_paths": [
+                    "results\\SACRaycast2\\Suika\\Suika-999944.pt"
+                ]
+            },
+            {
+                "steps": 1499793,
+                "file_path": "results\\SACRaycast2\\Suika\\Suika-1499793.onnx",
+                "reward": null,
+                "creation_time": 1718678170.0350015,
+                "auxillary_file_paths": [
+                    "results\\SACRaycast2\\Suika\\Suika-1499793.pt"
+                ]
+            },
+            {
+                "steps": 1693203,
+                "file_path": "results\\SACRaycast2\\Suika\\Suika-1693203.onnx",
+                "reward": null,
+                "creation_time": 1718679052.9076135,
+                "auxillary_file_paths": [
+                    "results\\SACRaycast2\\Suika\\Suika-1693203.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1693203,
+            "file_path": "results\\SACRaycast2\\Suika.onnx",
+            "reward": null,
+            "creation_time": 1718679052.9076135,
+            "auxillary_file_paths": [
+                "results\\SACRaycast2\\Suika\\Suika-1693203.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.27.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

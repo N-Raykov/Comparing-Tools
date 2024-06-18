@@ -1,0 +1,29 @@
+{
+    "Suika": {
+        "checkpoints": [
+            {
+                "steps": 288031,
+                "file_path": "results\\sacTest\\Suika\\Suika-288031.onnx",
+                "reward": null,
+                "creation_time": 1718645067.8617008,
+                "auxillary_file_paths": [
+                    "results\\sacTest\\Suika\\Suika-288031.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 288031,
+            "file_path": "results\\sacTest\\Suika.onnx",
+            "reward": null,
+            "creation_time": 1718645067.8617008,
+            "auxillary_file_paths": [
+                "results\\sacTest\\Suika\\Suika-288031.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.27.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

@@ -1,0 +1,65 @@
+{
+    "Suika": {
+        "checkpoints": [
+            {
+                "steps": 999788,
+                "file_path": "results\\PPORaycast\\Suika\\Suika-999788.onnx",
+                "reward": 6.875,
+                "creation_time": 1718664331.1265643,
+                "auxillary_file_paths": [
+                    "results\\PPORaycast\\Suika\\Suika-999788.pt"
+                ]
+            },
+            {
+                "steps": 1499681,
+                "file_path": "results\\PPORaycast\\Suika\\Suika-1499681.onnx",
+                "reward": -0.25,
+                "creation_time": 1718665191.0870404,
+                "auxillary_file_paths": [
+                    "results\\PPORaycast\\Suika\\Suika-1499681.pt"
+                ]
+            },
+            {
+                "steps": 1999583,
+                "file_path": "results\\PPORaycast\\Suika\\Suika-1999583.onnx",
+                "reward": -155.5,
+                "creation_time": 1718665977.9749348,
+                "auxillary_file_paths": [
+                    "results\\PPORaycast\\Suika\\Suika-1999583.pt"
+                ]
+            },
+            {
+                "steps": 2499709,
+                "file_path": "results\\PPORaycast\\Suika\\Suika-2499709.onnx",
+                "reward": -40.583333333333336,
+                "creation_time": 1718666740.9114442,
+                "auxillary_file_paths": [
+                    "results\\PPORaycast\\Suika\\Suika-2499709.pt"
+                ]
+            },
+            {
+                "steps": 2990512,
+                "file_path": "results\\PPORaycast\\Suika\\Suika-2990512.onnx",
+                "reward": null,
+                "creation_time": 1718667504.0964584,
+                "auxillary_file_paths": [
+                    "results\\PPORaycast\\Suika\\Suika-2990512.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 2990512,
+            "file_path": "results\\PPORaycast\\Suika.onnx",
+            "reward": null,
+            "creation_time": 1718667504.0964584,
+            "auxillary_file_paths": [
+                "results\\PPORaycast\\Suika\\Suika-2990512.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.27.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}

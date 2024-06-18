@@ -2,6 +2,7 @@ using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
+using System.Collections.Generic;
 
 public class Player : Agent
 {
@@ -9,6 +10,9 @@ public class Player : Agent
     [SerializeField] float leftBoundary = 0f;
     [SerializeField] float rightBoundary = 10f;
     [SerializeField] float dropCooldown = 1f;
+    [SerializeField] float maxIdleTime = 5f; // Max time allowed without dropping a fruit
+    [SerializeField] Transform cornerTarget; // Target transform to check for rewards
+    [SerializeField] LayerMask fruitLayer; // Layer mask to detect fruits
 
     private FruitManager fruitManager;
     private ScoreManager scoreManager;
@@ -21,14 +25,21 @@ public class Player : Agent
 
     void Start()
     {
-        fruitManager = FindObjectOfType<FruitManager>();
-        scoreManager = FindObjectOfType<ScoreManager>();
+        fruitManager = transform.parent.GetComponentInChildren<FruitManager>();
+        scoreManager = transform.parent.GetComponentInChildren<ScoreManager>();
         startingPos = transform.localPosition;
     }
 
     void Update()
     {
         CheckGameOver();
+
+        // Punish if the agent doesn't drop a fruit after maxIdleTime seconds
+        if (holdingFruit && Time.time >= lastDropTime + maxIdleTime)
+        {
+            SetReward(-5.0f);
+            lastDropTime = Time.time;
+        }
     }
 
     public override void OnEpisodeBegin()
@@ -43,15 +54,79 @@ public class Player : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
+        // Add the player's position and idle time
         sensor.AddObservation(transform.localPosition);
-        sensor.AddObservation(currentFruit ? currentFruit.transform.localPosition : Vector3.zero);
+        sensor.AddObservation(Time.time - (lastDropTime + maxIdleTime));
 
-        GameObject nextFruit = fruitManager.GetNextFruit();
-        sensor.AddObservation(nextFruit ? nextFruit.transform.localPosition : Vector3.zero);
-
-        foreach (var groundedFruit in GameObject.FindGameObjectsWithTag("GroundedFruit"))
+        // Add the current fruit's position and tier
+        if (currentFruit != null)
         {
-            sensor.AddObservation(groundedFruit.transform.localPosition);
+            Fruit currentFruitScript = currentFruit.GetComponent<Fruit>();
+            sensor.AddObservation(currentFruit.transform.localPosition);
+            sensor.AddObservation(currentFruitScript != null ? currentFruitScript.GetTier() : -1);
+
+            // Perform a raycast downward from the current fruit to detect the fruit below
+            RaycastHit2D hit = Physics2D.Raycast(currentFruit.transform.position, Vector2.down, Mathf.Infinity, fruitLayer);
+            if (hit.collider != null)
+            {
+                Fruit hitFruit = hit.collider.GetComponent<Fruit>();
+                if (hitFruit != null)
+                {
+                    sensor.AddObservation(hitFruit.transform.localPosition);
+                    sensor.AddObservation(hitFruit.GetTier());
+
+                    // Add the positions and tiers of fruits colliding with the hit fruit
+                    List<Fruit> collidingFruits = hitFruit.GetCollidingFruits();
+                    foreach (Fruit collidingFruit in collidingFruits)
+                    {
+                        if (collidingFruit != null)
+                        {
+                            sensor.AddObservation(collidingFruit.transform.localPosition);
+                            sensor.AddObservation(collidingFruit.GetTier());
+                        }
+                    }
+                }
+                else
+                {
+                    sensor.AddObservation(Vector3.zero);
+                    sensor.AddObservation(-1); // Indicator for no fruit
+                }
+            }
+            else
+            {
+                sensor.AddObservation(Vector3.zero);
+                sensor.AddObservation(-1); // Indicator for no fruit
+            }
+        }
+        else
+        {
+            sensor.AddObservation(Vector3.zero);
+            sensor.AddObservation(-1); // Indicator for no fruit
+        }
+
+        // Add the next fruit's position and tier
+        GameObject nextFruit = fruitManager.GetNextFruit();
+        if (nextFruit != null)
+        {
+            Fruit nextFruitScript = nextFruit.GetComponent<Fruit>();
+            sensor.AddObservation(nextFruit.transform.localPosition);
+            sensor.AddObservation(nextFruitScript != null ? nextFruitScript.GetTier() : -1);
+        }
+        else
+        {
+            sensor.AddObservation(Vector3.zero);
+            sensor.AddObservation(-1); // Indicator for no fruit
+        }
+
+        // Add the positions and tiers of grounded fruits
+        foreach (Transform groundedFruit in fruitManager.transform)
+        {
+            if (groundedFruit.CompareTag("GroundedFruit"))
+            {
+                Fruit groundedFruitScript = groundedFruit.GetComponent<Fruit>();
+                sensor.AddObservation(groundedFruit.transform.localPosition);
+                sensor.AddObservation(groundedFruitScript != null ? groundedFruitScript.GetTier() : -1);
+            }
         }
     }
 
@@ -88,7 +163,13 @@ public class Player : Agent
     void Move(int direction)
     {
         float move = direction * moveSpeed * Time.deltaTime;
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x + move, leftBoundary + currentFruit.GetComponent<CircleCollider2D>().radius * currentFruit.transform.localScale.x, rightBoundary - currentFruit.GetComponent<CircleCollider2D>().radius * currentFruit.transform.localScale.x), transform.position.y, transform.position.z);
+        float newPosX = transform.localPosition.x + move;
+        float fruitRadius = currentFruit.GetComponent<CircleCollider2D>().radius * currentFruit.transform.localScale.x;
+
+        // Clamp the new position within local boundaries
+        newPosX = Mathf.Clamp(newPosX, leftBoundary + fruitRadius, rightBoundary - fruitRadius);
+
+        transform.localPosition = new Vector3(newPosX, transform.localPosition.y, transform.localPosition.z);
     }
 
     int HandleInput()
@@ -105,7 +186,7 @@ public class Player : Agent
 
     void DropFruit()
     {
-        currentFruit.transform.parent = null;
+        currentFruit.transform.parent = fruitManager.transform;  // Ensure the fruit is parented to the FruitManager
         currentFruit.GetComponent<Rigidbody2D>().simulated = true;
         currentFruit.tag = "Fruit";
         holdingFruit = false;
@@ -122,7 +203,7 @@ public class Player : Agent
             {
                 if (collider.gameObject.CompareTag("GroundedFruit"))
                 {
-                    AddReward(-100.0f); // Penalty for losing the game
+                    SetReward(-20.0f);
                     EndEpisode();
                 }
             }
@@ -135,5 +216,14 @@ public class Player : Agent
         holdingFruit = true;
         fruit.transform.parent = transform;
         fruit.GetComponent<Rigidbody2D>().simulated = false; // Ensure the fruit is not simulated when held
+    }
+
+    public void RewardForCornerMerge(Vector3 fruitPosition)
+    {
+        float distanceToCorner = Vector3.Distance(fruitPosition, cornerTarget.localPosition);
+        if (distanceToCorner < 3.0f)
+        {
+            AddReward(Vector3.Distance(fruitPosition, cornerTarget.localPosition));
+        }
     }
 }
