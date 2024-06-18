@@ -1,0 +1,47 @@
+{
+    "BallAgent": {
+        "checkpoints": [
+            {
+                "steps": 519148,
+                "file_path": "results\\BalljumpSAC3\\BallAgent\\BallAgent-519148.onnx",
+                "reward": null,
+                "creation_time": 1718692173.2893567,
+                "auxillary_file_paths": [
+                    "results\\BalljumpSAC3\\BallAgent\\BallAgent-519148.pt"
+                ]
+            },
+            {
+                "steps": 999995,
+                "file_path": "results\\BalljumpSAC3\\BallAgent\\BallAgent-999995.onnx",
+                "reward": null,
+                "creation_time": 1718693957.7966833,
+                "auxillary_file_paths": [
+                    "results\\BalljumpSAC3\\BallAgent\\BallAgent-999995.pt"
+                ]
+            },
+            {
+                "steps": 1045939,
+                "file_path": "results\\BalljumpSAC3\\BallAgent\\BallAgent-1045939.onnx",
+                "reward": null,
+                "creation_time": 1718694111.8955107,
+                "auxillary_file_paths": [
+                    "results\\BalljumpSAC3\\BallAgent\\BallAgent-1045939.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1045939,
+            "file_path": "results\\BalljumpSAC3\\BallAgent.onnx",
+            "reward": null,
+            "creation_time": 1718694111.8955107,
+            "auxillary_file_paths": [
+                "results\\BalljumpSAC3\\BallAgent\\BallAgent-1045939.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.27.0",
+        "torch_version": "1.7.1+cu110"
+    }
+}
